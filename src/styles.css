@@ -154,3 +154,24 @@ button,input,select,textarea{font:inherit}
   border: none;
   font-weight: 700;
 }
+/* ===== Strong Visual Upgrade ===== */
+
+body {
+  background: linear-gradient(180deg, #0b1220 0%, #111827 100%);
+}
+
+.sidebar {
+  background: #0f172a;
+  border-right: 1px solid rgba(255,255,255,.05);
+}
+
+.main {
+  padding: 28px;
+}
+
+.card {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
