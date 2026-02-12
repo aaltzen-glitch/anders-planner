@@ -95,3 +95,38 @@ button,input,select,textarea{font:inherit}
   .sidebar{height:auto;position:relative}
   .kpi{grid-template-columns:1fr}
 }
+/* ===== SaaS Card Upgrade ===== */
+
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.25),
+    0 0 0 1px rgba(255,255,255,.03) inset;
+  transition: all .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.35),
+    0 0 0 1px rgba(14,165,233,.25) inset;
+}
+
+.h1 {
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.h2 {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #0ea5e9, #22d3ee);
+  border: none;
+  font-weight: 700;
+}
