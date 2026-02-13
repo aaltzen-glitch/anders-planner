@@ -18,6 +18,9 @@ export default function DataPage() {
   const [draft, setDraft] = React.useState<Draft>({ title: '', paid: false })
   const [filterBlock, setFilterBlock] = React.useState<string>('')
 
+  // NEW: helper date picker for laptops where native date UI is missing
+  const [showDatePicker, setShowDatePicker] = React.useState(false)
+
   async function load() {
     setLoading(true)
     const [{ data: b, error: eb }, { data: u, error: eu }, { data: it, error: ei }] = await Promise.all([
@@ -55,6 +58,7 @@ export default function DataPage() {
     setSaving(false)
     if (error) return alert(error.message)
     setDraft({ title: '', paid: false })
+    setShowDatePicker(false)
     await load()
   }
 
@@ -93,10 +97,37 @@ export default function DataPage() {
       <div className="card">
         <div className="h2">Ny post</div>
         <div className="grid" style={{ gridTemplateColumns: '160px 1fr 1fr', gap: 12, marginTop: 10 }}>
+          {/* DATE (robust for laptop) */}
           <div>
             <div className="muted small">Datum</div>
-            <input className="input" type="date" value={draft.date ?? ''} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} />
+
+            <div className="row" style={{ gap: 8 }}>
+              <input
+                className="input"
+                placeholder="YYYY-MM-DD"
+                value={draft.date ?? ''}
+                onChange={e => setDraft(d => ({ ...d, date: e.target.value }))}
+              />
+              <button className="btn" type="button" onClick={() => setShowDatePicker(s => !s)}>
+                📅
+              </button>
+            </div>
+
+            {showDatePicker && (
+              <div style={{ marginTop: 8 }}>
+                <input
+                  className="input"
+                  type="date"
+                  value={draft.date ?? ''}
+                  onChange={e => {
+                    setDraft(d => ({ ...d, date: e.target.value }))
+                    setShowDatePicker(false)
+                  }}
+                />
+              </div>
+            )}
           </div>
+
           <div style={{ gridColumn: 'span 2' }}>
             <div className="muted small">Post</div>
             <input className="input" placeholder="t.ex. Generator" value={draft.title} onChange={e => setDraft(d => ({ ...d, title: e.target.value }))} />
@@ -109,6 +140,7 @@ export default function DataPage() {
               {blocks.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
           </div>
+
           <div>
             <div className="muted small">Underprojekt</div>
             <select value={draft.underproject_id ?? ''} onChange={e => setDraft(d => ({ ...d, underproject_id: e.target.value || null }))}>
@@ -116,6 +148,7 @@ export default function DataPage() {
               {under.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
             </select>
           </div>
+
           <div className="row" style={{ alignItems: 'end' }}>
             <label className="badge info" style={{ cursor: 'pointer' }}>
               <input type="checkbox" checked={!!draft.paid} onChange={e => setDraft(d => ({ ...d, paid: e.target.checked }))} />
@@ -127,10 +160,12 @@ export default function DataPage() {
             <div className="muted small">Plan (SEK)</div>
             <input className="input" type="number" value={draft.plan_sek ?? ''} onChange={e => setDraft(d => ({ ...d, plan_sek: e.target.value === '' ? null : Number(e.target.value) }))} />
           </div>
+
           <div>
             <div className="muted small">Utfall (SEK)</div>
             <input className="input" type="number" value={draft.actual_sek ?? ''} onChange={e => setDraft(d => ({ ...d, actual_sek: e.target.value === '' ? null : Number(e.target.value) }))} />
           </div>
+
           <div></div>
 
           <div>
@@ -140,6 +175,7 @@ export default function DataPage() {
               {STATUS.map(s => <option key={s} value={s}>{s}</option>)}
             </select>
           </div>
+
           <div>
             <div className="muted small">Prio</div>
             <select value={draft.prio ?? ''} onChange={e => setDraft(d => ({ ...d, prio: e.target.value || null }))}>
@@ -147,6 +183,7 @@ export default function DataPage() {
               {PRIO.map(p => <option key={p} value={p}>{p}</option>)}
             </select>
           </div>
+
           <div className="row" style={{ justifyContent: 'end', alignItems: 'end' }}>
             <button className="btn primary" disabled={saving} onClick={addItem}>
               {saving ? 'Sparar…' : 'Spara'}
